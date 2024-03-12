@@ -15,8 +15,8 @@ namespace Controllers {
 		private readonly GameObject m_parentGameObject;
 		private readonly Coroutine m_spawnCoroutine;
 
-		public MonsterSpawner(GameSettings gameSettings, Transform spawnPosition) {
-			m_gameSettings = gameSettings;
+		public MonsterSpawner(Transform spawnPosition) {
+			m_gameSettings = ModelsProvider.GameSettings;
 			m_spawnPosition = spawnPosition;
 			m_spawnCoroutine = CoroutineRunner.StartCoroutine(SpawnCoroutine());
 			m_pool = PoolManager.GetOrCreatePool<Monster>();

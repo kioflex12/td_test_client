@@ -1,36 +1,47 @@
-﻿using Monsters;
+﻿using System.Collections;
+using Models;
+using Monsters;
 using UnityEngine;
 
 namespace Projectiles {
 	public class GuidedProjectile : BaseProjectile {
-		public IMovable m_target;
-		public float m_speed = 0.2f;
-		public int m_damage = 10;
+		protected override ProjectileType ProjectileType => ProjectileType.GuidedProjectile;
 
-		void Update () {
-			if (m_target == null) {
-				Destroy (gameObject);
-				return;
-			}
+		private Transform m_target;
 
-			var translation = m_target.Transform.position - transform.position;
-			if (translation.magnitude > m_speed) {
-				translation = translation.normalized * m_speed;
+		IEnumerator MoveToTarget () {
+
+			while (true) {
+				yield return new WaitForFixedUpdate();
+				
+				var translation = m_target.position - transform.position;
+				if (translation.magnitude > m_projectileSetting.m_speed) {
+					translation = translation.normalized * m_projectileSetting.m_speed;
+				}
+				transform.Translate (translation);
 			}
-			transform.Translate (translation);
 		}
 
 		void OnTriggerEnter(Collider other) {
 			if (other.TryGetComponent<IDamageable>(out var damageable))
 			{
-				damageable.ApplyDamage(m_damage);
+				damageable.ApplyDamage(m_projectileSetting.m_damage);
 			}
-
 			Destroy(gameObject);
 		}
 
-		public override void Init(IMovable target){
-			m_target = target;
+
+		public override void Init(IDamageable target){
+			if (target is MonoBehaviour monoBehaviour)
+			{
+				m_target = monoBehaviour.transform;
+				StartCoroutine(MoveToTarget());
+			}
+		}
+
+		private void OnDestroy()
+		{
+			StopAllCoroutines();
 		}
 	}
 }

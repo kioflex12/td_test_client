@@ -8,6 +8,7 @@ namespace Towers {
 		public float m_shootInterval = 0.5f;
 		public float m_range = 4f;
 		public BaseProjectile m_projectilePrefab;
+		
 
 		private float m_lastShotTime = -0.5f;
 		private float m_sqrShootDistance;
@@ -36,7 +37,7 @@ namespace Towers {
 
 		//TODO здесь можно сделать стек из монстров при инициализации башни брать пулл текущих мобов
 		//TODO выписывать при взятии в таргет и добавлять в конец стека при спавне
-		private IMovable FindTarget()
+		private IDamageable FindTarget()
 		{
 			var allAliveMonsters = PoolManager.GetOrCreatePool<Monster>();
 
@@ -68,7 +69,7 @@ namespace Towers {
 		}
 
 
-		public void TryShoot(IMovable target)
+		public void TryShoot(IDamageable target)
 		{
 			var projectile = Instantiate(m_projectilePrefab, transform.position + Vector3.up * 1.5f, Quaternion.identity);
 			projectile.Init(target);

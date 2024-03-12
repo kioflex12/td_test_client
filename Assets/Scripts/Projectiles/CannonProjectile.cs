@@ -1,12 +1,13 @@
-﻿using Monsters;
+﻿using Models;
+using Monsters;
 
 namespace Projectiles {
-	public class CannonProjectile : BaseProjectile {
-		public float m_speed = 0.2f;
-		public int m_damage = 10;
+	public class CannonProjectile : BaseProjectile
+	{
+		protected override ProjectileType ProjectileType => ProjectileType.CannonProjectile;
 
 		void Update () {
-			var translation = transform.forward * m_speed;
+			var translation = transform.forward * m_projectileSetting.m_speed;
 			transform.Translate (translation);
 		}
 
@@ -22,7 +23,8 @@ namespace Projectiles {
 		// 	Destroy (gameObject);
 		// }
 
-		public override void Init(IMovable target)
+
+		public override void Init(IDamageable damageable)
 		{
 			//TODO
 		}

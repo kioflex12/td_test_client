@@ -4,10 +4,9 @@ using UnityEngine;
 
 namespace Controllers {
     public sealed class EntryPoint : MonoBehaviour {
-        public GameSettings m_gameSettings;
         public MonsterPathManager m_pathManager;
         
-        private MonsterSpawner _mMonsterSpawner;
+        private MonsterSpawner m_monsterSpawner;
         private MonsterMover m_monsterMover;
         
         private void Awake() {
@@ -15,12 +14,12 @@ namespace Controllers {
         }
 
         private void InitializeSystems() {
-            _mMonsterSpawner = new MonsterSpawner(m_gameSettings, m_pathManager.m_spawnPoint);
+            m_monsterSpawner = new MonsterSpawner(m_pathManager.m_spawnPoint);
             m_monsterMover = new MonsterMover(m_pathManager.m_moveTargetPoint);
         }
 
         private void OnDestroy() {
-            _mMonsterSpawner.Dispose();
+            m_monsterSpawner.Dispose();
             m_monsterMover.Dispose();
             PoolManager.ReleasePools();
         }

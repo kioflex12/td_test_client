@@ -14,8 +14,8 @@ namespace Controllers {
 
         public MonsterMover(Transform moveTargetPoint) {
             m_movePoint = moveTargetPoint;
-            m_moveCoroutine = CoroutineRunner.StartCoroutine(MoveCoroutine());
             m_pool = PoolManager.GetOrCreatePool<Monster>();
+            m_moveCoroutine = CoroutineRunner.StartCoroutine(MoveCoroutine());
         }
 
         private IEnumerator MoveCoroutine() {
