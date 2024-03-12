@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using Managers;
 using Monsters;
 using static Models.GameSettings;
@@ -8,16 +9,19 @@ public class Monster : MonoBehaviour, IDamageable, IMovable {
 	public Transform Transform => transform;
 
 	private MonsterSettings m_monsterSettings;
+	private HashSet<Monster> m_monsterPool;
 	
 	private float m_currentHp;
 	private float m_speed;
 	
-	private void Awake() {
-		MonsterPoolManager.Instance.AddMonster(this);
+	private void Awake()
+	{
+		m_monsterPool = PoolManager.GetOrCreatePool<Monster>();
+		m_monsterPool.Add(this);
 	}
 
 	private void OnDestroy() {
-		MonsterPoolManager.Instance.RemoveMonster(this);
+		m_monsterPool.Remove(this);
 	}
 	
 	public void Init(MonsterSettings monsterSettings) {

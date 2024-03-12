@@ -7,7 +7,7 @@ namespace Controllers {
         public GameSettings m_gameSettings;
         public MonsterPathManager m_pathManager;
         
-        private Spawner m_spawner;
+        private MonsterSpawner _mMonsterSpawner;
         private MonsterMover m_monsterMover;
         
         private void Awake() {
@@ -15,13 +15,14 @@ namespace Controllers {
         }
 
         private void InitializeSystems() {
-            m_spawner = new Spawner(m_gameSettings, m_pathManager.m_spawnPoint);
-            m_monsterMover = new MonsterMover(m_gameSettings, m_pathManager.m_moveTargetPoint);
+            _mMonsterSpawner = new MonsterSpawner(m_gameSettings, m_pathManager.m_spawnPoint);
+            m_monsterMover = new MonsterMover(m_pathManager.m_moveTargetPoint);
         }
 
         private void OnDestroy() {
-            m_spawner.Dispose();
+            _mMonsterSpawner.Dispose();
             m_monsterMover.Dispose();
+            PoolManager.ReleasePools();
         }
     }
 }

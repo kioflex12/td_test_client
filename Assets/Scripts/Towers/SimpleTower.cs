@@ -38,21 +38,28 @@ namespace Towers {
 		//TODO выписывать при взятии в таргет и добавлять в конец стека при спавне
 		private IMovable FindTarget()
 		{
-			var allAliveMonsters = MonsterPoolManager.Instance.GetAllAliveMonsters();
+			var allAliveMonsters = PoolManager.GetOrCreatePool<Monster>();
 
 			if (allAliveMonsters.Count == 0)
 			{
 				return null;
 			}
-		
-			var target = allAliveMonsters[0];
-			var selectedTargetSqrMagnitude = (target.transform.position - transform.position).sqrMagnitude;
-			for (var i = 1; i < allAliveMonsters.Count; i++)
+
+			Monster target = null;
+			float selectedTargetSqrMagnitude = 0;
+			foreach (var monster in allAliveMonsters)
 			{
-				var sqrMagnitude = (allAliveMonsters[i].transform.position - transform.position).sqrMagnitude;
+				if (target == null)
+				{
+					target = monster;
+					selectedTargetSqrMagnitude = (target.transform.position - transform.position).sqrMagnitude;
+					continue;
+				}
+				
+				var sqrMagnitude = (monster.transform.position - transform.position).sqrMagnitude;
 				if (sqrMagnitude < selectedTargetSqrMagnitude)
 				{
-					target = allAliveMonsters[i];
+					target = monster;
 					selectedTargetSqrMagnitude = sqrMagnitude;
 				}
 			}
