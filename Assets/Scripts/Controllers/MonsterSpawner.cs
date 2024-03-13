@@ -11,8 +11,7 @@ namespace Controllers {
 	public class MonsterSpawner : IDisposable {
 		private readonly GameSettings m_gameSettings;
 		private readonly Transform m_spawnPosition;
-		private readonly HashSet<Monster> m_pool;
-		private readonly GameObject m_parentGameObject;
+		private readonly GamePool<Monster> m_pool;
 		private readonly Coroutine m_spawnCoroutine;
 
 		public MonsterSpawner(Transform spawnPosition) {
@@ -20,19 +19,19 @@ namespace Controllers {
 			m_spawnPosition = spawnPosition;
 			m_spawnCoroutine = CoroutineRunner.StartCoroutine(SpawnCoroutine());
 			m_pool = PoolManager.GetOrCreatePool<Monster>();
-			m_parentGameObject = new GameObject("MonsterPool");
 		}
 
 		private IEnumerator SpawnCoroutine () {
+			var wfs = new WaitForSeconds(m_gameSettings.m_spawnSettings.m_interval);
 			while (true)
 			{
-				yield return new WaitForSeconds(m_gameSettings.m_spawnSettings.m_interval);
+				yield return wfs;
 				
 				if (m_pool == null) {
 					throw new Exception("Can`t get pool monster");
 				}
 
-				var monster = m_pool.FirstOrDefault(poolElement => poolElement.IsAlive == false);
+				var monster = m_pool.Get().FirstOrDefault(poolElement => poolElement.IsAlive == false);
 
 				if (monster == null) {
 					monster = CreateMonster();
@@ -44,8 +43,8 @@ namespace Controllers {
 		}
 
 		private Monster CreateMonster() {
-			var monsterObject = Resources.Load<Monster>("Monster/Monster");
-			var monster = Object.Instantiate(monsterObject, m_parentGameObject.transform);
+			var monsterObject = Resources.Load<Monster>("Monsters/Monster");
+			var monster = Object.Instantiate(monsterObject, m_pool.m_poolContainer.transform);
 			return monster;
 		}
 
@@ -53,7 +52,6 @@ namespace Controllers {
 			if (m_spawnCoroutine != null) {
 				CoroutineRunner.Stop(m_spawnCoroutine);
 			}	
-			Object.Destroy(m_parentGameObject);
 		}
 	}
 }

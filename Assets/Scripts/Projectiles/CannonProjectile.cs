@@ -1,13 +1,14 @@
 ﻿using Models;
 using Monsters;
+using UnityEngine;
 
 namespace Projectiles {
 	public class CannonProjectile : BaseProjectile
 	{
-		protected override ProjectileType ProjectileType => ProjectileType.CannonProjectile;
+		public override ProjectileType ProjectileType => ProjectileType.CannonProjectile;
 
 		void Update () {
-			var translation = transform.forward * m_projectileSetting.m_speed;
+			var translation = transform.forward * mProjectileSettings.m_speed;
 			transform.Translate (translation);
 		}
 
@@ -24,7 +25,7 @@ namespace Projectiles {
 		// }
 
 
-		public override void Init(IDamageable damageable)
+		public override void Init(IDamageable damageable, Transform shootPoint)
 		{
 			//TODO
 		}

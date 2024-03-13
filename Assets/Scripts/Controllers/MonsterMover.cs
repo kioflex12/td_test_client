@@ -8,7 +8,7 @@ using UnityEngine;
 namespace Controllers {
     public class MonsterMover : IDisposable {
         private readonly Transform m_movePoint;
-        private readonly HashSet<Monster> m_pool;
+        private readonly GamePool<Monster> m_pool;
 
         private Coroutine m_moveCoroutine;
 
@@ -19,10 +19,11 @@ namespace Controllers {
         }
 
         private IEnumerator MoveCoroutine() {
+            var wfu = new WaitForFixedUpdate();
             while (true) {
-                yield return new WaitForFixedUpdate();
+                yield return wfu;
 
-                foreach (var monster in m_pool) {
+                foreach (var monster in m_pool.Get()) {
                     if (monster.IsAlive && monster is IMovable movableMonster)
                     {
                         movableMonster.Move(m_movePoint);

@@ -5,38 +5,44 @@ using UnityEngine;
 
 namespace Projectiles {
 	public class GuidedProjectile : BaseProjectile {
-		protected override ProjectileType ProjectileType => ProjectileType.GuidedProjectile;
+		public override ProjectileType ProjectileType => ProjectileType.GuidedProjectile;
 
-		private Transform m_target;
+		private IDamageable m_target;
+		private Vector3 m_lastLiveTargetPosition;
 
 		IEnumerator MoveToTarget () {
 
 			while (true) {
 				yield return new WaitForFixedUpdate();
-				
-				var translation = m_target.position - transform.position;
-				if (translation.magnitude > m_projectileSetting.m_speed) {
-					translation = translation.normalized * m_projectileSetting.m_speed;
+				if (IsActive == false)
+				{
+					break;
+				}
+				if (m_target != null)
+				{
+					m_lastLiveTargetPosition = m_target.Transform.position;
+
+					if (m_target?.IsAlive == false)
+					{
+						m_lastLiveTargetPosition = m_target.Transform.position;
+						m_target = null;
+					}
+				}
+
+				var translation = m_lastLiveTargetPosition - transform.position;
+				if (translation.magnitude > mProjectileSettings.m_speed) {
+					translation = translation.normalized * mProjectileSettings.m_speed;
 				}
 				transform.Translate (translation);
 			}
 		}
 
-		void OnTriggerEnter(Collider other) {
-			if (other.TryGetComponent<IDamageable>(out var damageable))
-			{
-				damageable.ApplyDamage(m_projectileSetting.m_damage);
-			}
-			Destroy(gameObject);
-		}
-
-
-		public override void Init(IDamageable target){
-			if (target is MonoBehaviour monoBehaviour)
-			{
-				m_target = monoBehaviour.transform;
-				StartCoroutine(MoveToTarget());
-			}
+		public override void Init(IDamageable target, Transform shootPoint) {
+			
+			gameObject.transform.position = shootPoint.transform.position;
+			m_target = target;
+			gameObject.SetActive(true);
+			StartCoroutine(MoveToTarget());
 		}
 
 		private void OnDestroy()
