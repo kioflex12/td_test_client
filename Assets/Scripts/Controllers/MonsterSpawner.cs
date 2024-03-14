@@ -35,6 +35,7 @@ namespace Controllers {
 
 				if (monster == null) {
 					monster = CreateMonster();
+					m_pool.Add(monster);
 				}
 				
 				monster.Init(m_gameSettings.m_monsterSettings);

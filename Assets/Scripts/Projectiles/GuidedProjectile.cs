@@ -6,42 +6,32 @@ using UnityEngine;
 namespace Projectiles {
 	public class GuidedProjectile : BaseProjectile {
 		public override ProjectileType ProjectileType => ProjectileType.GuidedProjectile;
-
-		private IDamageable m_target;
-		private Vector3 m_lastLiveTargetPosition;
-
-		IEnumerator MoveToTarget () {
-
+		
+		private IEnumerator MoveToTarget () {
 			while (true) {
 				yield return new WaitForFixedUpdate();
-				if (IsActive == false)
-				{
+				if (IsActive == false) {
 					break;
 				}
-				if (m_target != null)
-				{
-					m_lastLiveTargetPosition = m_target.Transform.position;
+				if (m_damageableTarget != null) {
+					m_projectileTargetPosition = m_damageableTarget.Transform.position;
 
-					if (m_target?.IsAlive == false)
-					{
-						m_lastLiveTargetPosition = m_target.Transform.position;
-						m_target = null;
+					if (m_damageableTarget?.IsAlive == false) {
+						m_projectileTargetPosition = m_damageableTarget.Transform.position;
+						m_damageableTarget = null;
 					}
 				}
 
-				var translation = m_lastLiveTargetPosition - transform.position;
-				if (translation.magnitude > mProjectileSettings.m_speed) {
-					translation = translation.normalized * mProjectileSettings.m_speed;
+				var translation = m_projectileTargetPosition - transform.position;
+				if (translation.magnitude > m_projectileSettings.m_speed) {
+					translation = translation.normalized * m_projectileSettings.m_speed;
 				}
 				transform.Translate (translation);
 			}
 		}
 
 		public override void Init(IDamageable target, Transform shootPoint) {
-			
-			gameObject.transform.position = shootPoint.transform.position;
-			m_target = target;
-			gameObject.SetActive(true);
+			base.Init(target,shootPoint);
 			StartCoroutine(MoveToTarget());
 		}
 

@@ -7,10 +7,19 @@ namespace Projectiles {
 	{
 		public override ProjectileType ProjectileType => ProjectileType.CannonProjectile;
 
-		void Update () {
-			var translation = transform.forward * mProjectileSettings.m_speed;
-			transform.Translate (translation);
+		private Vector3 CalculatePredictedTargetPosition(IDamageable damageable)
+		{
+			if (damageable is Monster monster)
+			{
+				
+			}
+
+			return Vector3.zero;
 		}
+		// void Update () {
+		// 	var translation = transform.forward * m_projectileSettings.m_speed;
+		// 	transform.Translate (translation);
+		// }
 
 		// void OnTriggerEnter(Collider other) {
 		// 	var monster = other.gameObject.GetComponent<Monster> ();
@@ -27,7 +36,8 @@ namespace Projectiles {
 
 		public override void Init(IDamageable damageable, Transform shootPoint)
 		{
-			//TODO
+			base.Init(damageable, shootPoint);
+			m_projectileTargetPosition = CalculatePredictedTargetPosition(damageable);
 		}
 	}
 }

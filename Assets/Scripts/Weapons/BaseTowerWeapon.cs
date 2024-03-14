@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace Weapons
 {
-    public abstract class BaseWeapon: MonoBehaviour, IWeapon
+    public abstract class BaseTowerWeapon: MonoBehaviour, IWeapon
     {
         public BaseProjectile m_weaponProjectile;
         public Transform m_shootPoint;
@@ -25,35 +25,29 @@ namespace Weapons
         protected abstract WeaponType WeaponType { get; }
         public abstract void Shoot();
 
-        public virtual void Init()
-        {
+        public virtual void Init() {
             m_projectilePool = PoolManager.GetOrCreatePool<BaseProjectile>();
-            m_weaponSettings = ModelsProvider.GameSettings.GetTowerWeaponSettings(WeaponType);
+            m_weaponSettings = ModelsProvider.GameSettings.GetWeaponTowerSettings(WeaponType);
         }
 
-        public bool ShootAvailable()
-        {
+        public bool ShootAvailable() {
             return !(m_lastShotTime + m_weaponSettings.m_shootInterval > Time.time);
         }
 
-        protected BaseProjectile CreateProjectile()
-        {
+        private BaseProjectile CreateProjectile() {
             var projectile = Instantiate(m_weaponProjectile, m_projectilePool.m_poolContainer.transform);
             projectile.transform.position = m_shootPoint.position;
             m_projectilePool.Add(projectile);
             return projectile;
         }
 
-        public void SetTarget(IDamageable target)
-        {
+        public void SetTarget(IDamageable target) {
             m_shootTarget = target;
         }
 
-        public BaseProjectile GetShootProjectile()
-        {
+        protected BaseProjectile GetOrCreateProjectile() {
             var projectile = m_projectilePool.Get().FirstOrDefault(p => p.IsActive == false && p.ProjectileType == m_weaponProjectile.ProjectileType);
-            if (projectile == null)
-            {
+            if (projectile == null) {
                 projectile = CreateProjectile();
             }
 

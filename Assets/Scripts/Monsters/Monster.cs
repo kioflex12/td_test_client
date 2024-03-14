@@ -6,6 +6,8 @@ using static Models.GameSettings;
 public class Monster : MonoBehaviour, IDamageable, IMovable {
 	public bool IsAlive { get; private set; }
 	public Transform Transform => transform;
+	public Transform MoveTargetTransform { get; private set; }
+	public float MoveSpeed => m_speed;
 
 	private MonsterSettings m_monsterSettings;
 	private GamePool<Monster> m_monsterPool;
@@ -15,7 +17,6 @@ public class Monster : MonoBehaviour, IDamageable, IMovable {
 	
 	private void Awake() {
 		m_monsterPool = PoolManager.GetOrCreatePool<Monster>();
-		m_monsterPool.Add(this);
 	}
 
 	private void OnDestroy() {
@@ -46,11 +47,9 @@ public class Monster : MonoBehaviour, IDamageable, IMovable {
 		gameObject.SetActive(false);
 	}
 
-	public void Move(Transform target) {
-		var translation = target.position - transform.position;
-		if (translation.magnitude > m_speed) {
-			translation = translation.normalized * m_speed;
-		}
-		transform.Translate (translation);	
+	public void Move(Transform target)
+	{
+		MoveTargetTransform = target;
+		transform.position = Vector3.MoveTowards(transform.position, target.position, m_speed);
 	}
 }

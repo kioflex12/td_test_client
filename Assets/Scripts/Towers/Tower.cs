@@ -6,7 +6,7 @@ using Weapons;
 
 namespace Towers {
 	public class Tower : MonoBehaviour {
-		public BaseWeapon m_towerWeapon;
+		public BaseTowerWeapon m_towerWeapon;
 
 		private void Awake() {
 			if (m_towerWeapon == null) {

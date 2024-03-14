@@ -9,12 +9,13 @@ namespace Models {
         public MonsterSpawnSettings m_spawnSettings;
         public MonsterSettings m_monsterSettings;
         public List<BaseTowerWeaponSettings> m_towerWeaponSettings;
-        public List<ProjectileSettings> projectileSettings;
+        public List<ProjectileSettings> m_projectileSettings;
+        public CannonTowerWeaponSettings m_cannonTowerWeaponSettings;
 
         public ProjectileSettings GetProjectileSettings(ProjectileType projectileType) {
-            foreach (var projectileSetting in projectileSettings)
+            foreach (var projectileSetting in m_projectileSettings)
             {
-                if (projectileSetting.projectileType == projectileType)
+                if (projectileSetting.m_projectileType == projectileType)
                 {
                     return projectileSetting;
                 }
@@ -22,20 +23,19 @@ namespace Models {
 
             throw new Exception($"Can`t find projectile settings with Type {projectileType}");
         }
-
-        public BaseTowerWeaponSettings GetTowerWeaponSettings(WeaponType weaponType)
-        {
-            foreach (var towerWeaponSetting in m_towerWeaponSettings)
+        
+        public BaseTowerWeaponSettings GetWeaponTowerSettings(WeaponType weaponType) {
+            foreach (var weaponSetting in m_towerWeaponSettings)
             {
-                if (towerWeaponSetting.m_weaponType == weaponType)
+                if (weaponSetting.m_weaponType == weaponType)
                 {
-                    return towerWeaponSetting;
+                    return weaponSetting;
                 }
             }
-            
-            throw new Exception($"Can`t find TowerWeaponSettings settings with Type {weaponType}");
 
+            throw new Exception($"Can`t find projectile settings with Type {weaponType}");
         }
+
         
         [Serializable]
         public class MonsterSpawnSettings {
@@ -50,7 +50,7 @@ namespace Models {
         
         [Serializable]
         public class ProjectileSettings {
-            public ProjectileType projectileType; 
+            public ProjectileType m_projectileType; 
             public float m_speed = 0.2f;
             public int m_damage = 10;
         }
@@ -58,17 +58,15 @@ namespace Models {
         
         [Serializable]
         public class BaseTowerWeaponSettings {
-            public WeaponType m_weaponType;
+            public WeaponType m_weaponType; 
             public float m_shootInterval = 0.5f;
             public float m_range = 4f;
         } 
         
         [Serializable]
-        public class SimpleTowerWeaponSettings : BaseTowerWeaponSettings {
-        }
-        
-        [Serializable]
-        public class CannonWeaponSettings {
+        public class CannonTowerWeaponSettings  {
+            public float m_initialSpeed = 18f;
+            public float m_angle = 45f;
         }
     }
 }
