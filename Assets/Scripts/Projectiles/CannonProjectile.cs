@@ -34,9 +34,9 @@ namespace Projectiles {
 		// }
 
 
-		public override void Init(IDamageable damageable, Transform shootPoint)
+		public override void Initialize(IDamageable damageable, Transform shootPoint)
 		{
-			base.Init(damageable, shootPoint);
+			base.Initialize(damageable, shootPoint);
 			m_projectileTargetPosition = CalculatePredictedTargetPosition(damageable);
 		}
 	}

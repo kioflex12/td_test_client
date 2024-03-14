@@ -67,6 +67,7 @@ namespace Models {
         public class CannonTowerWeaponSettings  {
             public float m_initialSpeed = 18f;
             public float m_angle = 45f;
+            public float m_rotationSpeed = 5f;
         }
     }
 }

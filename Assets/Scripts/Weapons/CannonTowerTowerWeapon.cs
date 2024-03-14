@@ -10,16 +10,17 @@ namespace Weapons
         
         protected override WeaponType WeaponType => WeaponType.CannonWeapon;
         
+        public override void Init() {
+            base.Init();
+            m_cannonTowerWeaponSetting = ModelsProvider.GameSettings.m_cannonTowerWeaponSettings;
+        }
+        
         public override void Shoot() {
             if (m_shootTarget == null) {
                 return;
             }
             var projectile = GetOrCreateProjectile();
-            projectile.Init(m_shootTarget, m_shootPoint);
-            m_lastShotTime = Time.time;
-            
-            projectile.Rigidbody.velocity = Vector3.zero;
-            projectile.Rigidbody.angularVelocity = Vector3.zero;
+            projectile.Initialize(m_shootTarget, m_shootPoint);
 
             Vector3 predictedTargetPosition;
             if (projectile.MovableTarget != null && projectile.MovableTarget.MoveTargetTransform != null) {
@@ -27,9 +28,14 @@ namespace Weapons
                 var time = CalculateProjectileMoveTime(m_shootPoint.position.y, movableTarget.Transform.position.y, m_cannonTowerWeaponSetting.m_initialSpeed, m_cannonTowerWeaponSetting.m_angle);
                 predictedTargetPosition = GetPredictPosition(movableTarget.Transform.position, movableTarget.MoveTargetTransform.position, movableTarget.MoveSpeed, time + 0.1f);
             } else {
-                predictedTargetPosition = projectile.DamageableTarget.Transform.position;
+                return;
             }
+
+            projectile.Rigidbody.velocity = Vector3.zero;
+            projectile.Rigidbody.angularVelocity = Vector3.zero;
+            projectile.Activate();
             LaunchProjectile(projectile.Rigidbody, m_shootPoint.position, predictedTargetPosition, m_cannonTowerWeaponSetting.m_initialSpeed, m_cannonTowerWeaponSetting.m_angle);
+            m_lastShotTime = Time.time;
         }
         
         public void LaunchProjectile(Rigidbody projectileRigidbody, Vector3 launchPosition, Vector3 targetPosition, float initialSpeed, float launchAngleDegrees) {
@@ -69,19 +75,20 @@ namespace Weapons
             return predictPosition;
         }
 
-        public override void Init() {
-            base.Init();
-            m_cannonTowerWeaponSetting = ModelsProvider.GameSettings.m_cannonTowerWeaponSettings;
-        }
-
-
-        private void Update()
+        //TODO чёто очень неоптимизированное не придумал лучше
+        private void FixedUpdate()
         {
-            // if (m_shootTarget == null)
-            // {
-            //     m_cannonTranform.position = Vector3.zero;
-            //     return;
-            // }
+            if (m_shootTarget != null)
+            {
+                var time = CalculateProjectileMoveTime(m_shootPoint.position.y, m_movableTarget.Transform.position.y, m_cannonTowerWeaponSetting.m_initialSpeed, m_cannonTowerWeaponSetting.m_angle);
+                var predictedTargetPosition = GetPredictPosition(m_shootPoint.position, m_shootTarget.Transform.position, m_movableTarget.MoveSpeed, time + 0.1f);
+                
+                var directionToTarget = predictedTargetPosition - transform.position;
+                var targetRotation = Quaternion.LookRotation(directionToTarget);
+                var newRotation = Quaternion.RotateTowards(transform.rotation, targetRotation, m_cannonTowerWeaponSetting.m_rotationSpeed * Time.fixedDeltaTime);
+
+                transform.rotation = Quaternion.Euler(0, newRotation.eulerAngles.y, 0);
+            }
         }
     }
 }

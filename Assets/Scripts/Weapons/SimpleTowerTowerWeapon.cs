@@ -10,7 +10,7 @@ namespace Weapons {
                 return;
             }
             var projectile = GetOrCreateProjectile();
-            projectile.Init(m_shootTarget, m_shootPoint);
+            projectile.Initialize(m_shootTarget, m_shootPoint);
             m_lastShotTime = Time.time;
         }
     }

@@ -18,6 +18,7 @@ namespace Weapons
         protected GamePool<BaseProjectile> m_projectilePool;
         
         public IDamageable m_shootTarget;
+        public IMovable m_movableTarget;
         
         protected float m_lastShotTime = -0.5f;
         public float SqrShootDistance => m_weaponSettings.m_range * m_weaponSettings.m_range;
@@ -37,12 +38,14 @@ namespace Weapons
         private BaseProjectile CreateProjectile() {
             var projectile = Instantiate(m_weaponProjectile, m_projectilePool.m_poolContainer.transform);
             projectile.transform.position = m_shootPoint.position;
+            projectile.gameObject.SetActive(false);
             m_projectilePool.Add(projectile);
             return projectile;
         }
 
         public void SetTarget(IDamageable target) {
             m_shootTarget = target;
+            m_movableTarget = target as IMovable;
         }
 
         protected BaseProjectile GetOrCreateProjectile() {

@@ -30,8 +30,9 @@ namespace Projectiles {
 			}
 		}
 
-		public override void Init(IDamageable target, Transform shootPoint) {
-			base.Init(target,shootPoint);
+		public override void Initialize(IDamageable target, Transform shootPoint) {
+			base.Initialize(target,shootPoint);
+			Activate();
 			StartCoroutine(MoveToTarget());
 		}
 

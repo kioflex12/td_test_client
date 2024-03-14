@@ -29,16 +29,20 @@ namespace Projectiles
 
         public abstract ProjectileType ProjectileType { get; }
 
-        public virtual void Init(IDamageable target, Transform shootPoint) {
+        public virtual void Initialize(IDamageable target, Transform shootPoint) {
             gameObject.transform.position = shootPoint.transform.position;
             m_damageableTarget = target;
             m_movableTarget = target as IMovable;
-            gameObject.SetActive(true);
         }
 
         private void Awake() {
             m_projectileSettings = ModelsProvider.GameSettings.GetProjectileSettings(ProjectileType);
             m_projectilePool = PoolManager.GetOrCreatePool<BaseProjectile>();
+        }
+
+        public void Activate()
+        {
+            gameObject.SetActive(true);
         }
 
         private void OnEnable() {
