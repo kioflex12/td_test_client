@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Managers;
 using Models;
+using Monsters;
 using UnityEngine;
 using Object = UnityEngine.Object;
 

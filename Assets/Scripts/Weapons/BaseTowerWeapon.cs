@@ -6,24 +6,24 @@ using Monsters;
 using Projectiles;
 using Towers;
 using UnityEngine;
+using static Models.GameSettings;
 
-namespace Weapons
-{
-    public abstract class BaseTowerWeapon: MonoBehaviour, IWeapon
-    {
+namespace Weapons {
+    public abstract class BaseTowerWeapon: MonoBehaviour, IWeapon {
         public BaseProjectile m_weaponProjectile;
         public Transform m_shootPoint;
         
-        protected GameSettings.BaseTowerWeaponSettings m_weaponSettings; 
+        protected BaseTowerWeaponSettings m_weaponSettings; 
         protected GamePool<BaseProjectile> m_projectilePool;
         
         public IDamageable m_shootTarget;
-        public IMovable m_movableTarget;
+        protected IMovable m_movableTarget;
         
         protected float m_lastShotTime = -0.5f;
         public float SqrShootDistance => m_weaponSettings.m_range * m_weaponSettings.m_range;
-
+        
         protected abstract WeaponType WeaponType { get; }
+        
         public abstract void Shoot();
 
         public virtual void Init() {
@@ -53,7 +53,6 @@ namespace Weapons
             if (projectile == null) {
                 projectile = CreateProjectile();
             }
-
             return projectile;
         }
     }

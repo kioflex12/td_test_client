@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Managers {
     public class CoroutineRunner : MonoBehaviour {
@@ -8,7 +9,7 @@ namespace Managers {
         private static CoroutineRunner Instance {
             get {
                 if (m_instance != null) return m_instance;
-                var go = new GameObject("CoroutineRunner");
+                var go = new GameObject("[CoroutineRunner]");
                 m_instance = go.AddComponent<CoroutineRunner>();
                 DontDestroyOnLoad(go);
                 return m_instance;
@@ -25,6 +26,19 @@ namespace Managers {
             }
         }
 
+        private void OnEnable() {
+            SceneManager.sceneUnloaded += OnSceneUnloaded;
+        }
+
+        private void OnDisable() {
+            SceneManager.sceneUnloaded -= OnSceneUnloaded;
+        }
+
+        private void OnSceneUnloaded(Scene current) {
+            if (this != null) { 
+                Destroy(gameObject);
+            }
+        }
         private void OnDestroy() {
             StopAllCoroutines();
         }

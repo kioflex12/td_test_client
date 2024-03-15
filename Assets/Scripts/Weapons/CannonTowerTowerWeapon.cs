@@ -2,10 +2,8 @@ using Models;
 using UnityEngine;
 using static Models.GameSettings;
 
-namespace Weapons
-{
-    public class CannonTowerTowerWeapon : BaseTowerWeapon
-    {
+namespace Weapons {
+    public class CannonTowerTowerWeapon : BaseTowerWeapon {
         private CannonTowerWeaponSettings m_cannonTowerWeaponSetting;
         
         protected override WeaponType WeaponType => WeaponType.CannonWeapon;
@@ -76,10 +74,8 @@ namespace Weapons
         }
 
         //TODO чёто очень неоптимизированное не придумал лучше
-        private void FixedUpdate()
-        {
-            if (m_shootTarget != null)
-            {
+        private void FixedUpdate() {
+            if (m_shootTarget != null) {
                 var time = CalculateProjectileMoveTime(m_shootPoint.position.y, m_movableTarget.Transform.position.y, m_cannonTowerWeaponSetting.m_initialSpeed, m_cannonTowerWeaponSetting.m_angle);
                 var predictedTargetPosition = GetPredictPosition(m_shootPoint.position, m_shootTarget.Transform.position, m_movableTarget.MoveSpeed, time + 0.1f);
                 

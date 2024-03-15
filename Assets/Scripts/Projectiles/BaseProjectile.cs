@@ -5,11 +5,9 @@ using Monsters;
 using UnityEngine;
 using static Models.GameSettings;
 
-namespace Projectiles
-{
+namespace Projectiles {
     [RequireComponent(typeof(Collider), typeof(Rigidbody))]
-    public abstract class BaseProjectile : MonoBehaviour
-    {
+    public abstract class BaseProjectile : MonoBehaviour {
         public Rigidbody m_rigidbody;
 
         public Rigidbody Rigidbody => m_rigidbody;
@@ -40,8 +38,7 @@ namespace Projectiles
             m_projectilePool = PoolManager.GetOrCreatePool<BaseProjectile>();
         }
 
-        public void Activate()
-        {
+        public void Activate() {
             gameObject.SetActive(true);
         }
 

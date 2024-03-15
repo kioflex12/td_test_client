@@ -2,8 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Managers
-{
+namespace Managers {
     public class PoolManager { 
 
         private static readonly List<AbstractGamePool> m_gamePools = new List<AbstractGamePool>();
