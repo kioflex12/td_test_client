@@ -19,7 +19,7 @@ namespace Weapons {
         public IDamageable m_shootTarget;
         protected IMovable m_movableTarget;
         
-        protected float m_lastShotTime = -0.5f;
+        protected float m_lastShotTime;
         public float SqrShootDistance => m_weaponSettings.m_range * m_weaponSettings.m_range;
         
         protected abstract WeaponType WeaponType { get; }
@@ -29,10 +29,11 @@ namespace Weapons {
         public virtual void Init() {
             m_projectilePool = PoolManager.GetOrCreatePool<BaseProjectile>();
             m_weaponSettings = ModelsProvider.GameSettings.GetWeaponTowerSettings(WeaponType);
+            m_lastShotTime = -m_weaponSettings.m_shootInterval;
         }
 
         public bool ShootAvailable() {
-            return !(m_lastShotTime + m_weaponSettings.m_shootInterval > Time.time);
+            return m_lastShotTime + m_weaponSettings.m_shootInterval > Time.time == false || m_shootTarget == null;
         }
 
         private BaseProjectile CreateProjectile() {

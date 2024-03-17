@@ -6,7 +6,7 @@ namespace Monsters {
 	public class Monster : MonoBehaviour, IDamageable, IMovable {
 		public bool IsAlive { get; private set; }
 		public Transform Transform => transform;
-		public Transform MoveTargetTransform { get; private set; }
+		public Transform MoveTarget { get; private set; }
 		public float MoveSpeed => m_speed;
 
 		private MonsterSettings m_monsterSettings;
@@ -48,8 +48,16 @@ namespace Monsters {
 		}
 
 		public void Move(Transform target) {
-			MoveTargetTransform = target;
-			transform.position = Vector3.MoveTowards(transform.position, target.position, m_speed);
+			MoveTarget = target;
+			transform.position = Vector3.MoveTowards(transform.position, target.position, MoveSpeed);
+		}
+		
+		public Vector3 GetPredictPosition(float predictTime) {
+			var fixedUpdateCalls = predictTime / Time.fixedDeltaTime; 
+			var totalMovement =  MoveSpeed * fixedUpdateCalls; 
+			var direction = (MoveTarget.position - Transform.position).normalized;
+			var predictPosition = Transform.position + direction * totalMovement;
+			return predictPosition;
 		}
 	}
 }

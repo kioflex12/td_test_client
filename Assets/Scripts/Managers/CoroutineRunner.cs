@@ -1,6 +1,5 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace Managers {
     public class CoroutineRunner : MonoBehaviour {
@@ -25,20 +24,7 @@ namespace Managers {
                 Instance.StopCoroutine(coroutine);
             }
         }
-
-        private void OnEnable() {
-            SceneManager.sceneUnloaded += OnSceneUnloaded;
-        }
-
-        private void OnDisable() {
-            SceneManager.sceneUnloaded -= OnSceneUnloaded;
-        }
-
-        private void OnSceneUnloaded(Scene current) {
-            if (this != null) { 
-                Destroy(gameObject);
-            }
-        }
+        
         private void OnDestroy() {
             StopAllCoroutines();
         }

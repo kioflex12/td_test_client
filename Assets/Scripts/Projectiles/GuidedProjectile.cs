@@ -6,6 +6,8 @@ using UnityEngine;
 namespace Projectiles {
 	public class GuidedProjectile : BaseProjectile {
 		public override ProjectileType ProjectileType => ProjectileType.GuidedProjectile;
+
+		private Coroutine m_moveCoroutine;
 		
 		private IEnumerator MoveToTarget () {
 			while (true) {
@@ -33,11 +35,13 @@ namespace Projectiles {
 		public override void Initialize(IDamageable target, Transform shootPoint) {
 			base.Initialize(target,shootPoint);
 			Activate();
-			StartCoroutine(MoveToTarget());
+			if (m_moveCoroutine != null) {
+				StopCoroutine(m_moveCoroutine);
+			}
+			m_moveCoroutine = StartCoroutine(MoveToTarget());
 		}
-
-		private void OnDestroy()
-		{
+		
+		private void OnDestroy() {
 			StopAllCoroutines();
 		}
 	}

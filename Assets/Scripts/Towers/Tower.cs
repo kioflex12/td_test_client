@@ -57,7 +57,10 @@ namespace Towers {
 			if (m_towerWeapon.m_shootTarget != shootTarget) {
 				m_towerWeapon.SetTarget(shootTarget);
 			}
-			m_towerWeapon.Shoot();
+
+			if (m_towerWeapon.m_shootTarget != null) {
+				m_towerWeapon.Shoot();
+			}
 		}
 	}
 }

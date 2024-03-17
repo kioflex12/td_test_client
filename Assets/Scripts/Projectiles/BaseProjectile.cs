@@ -1,4 +1,3 @@
-using System;
 using Managers;
 using Models;
 using Monsters;
@@ -9,7 +8,6 @@ namespace Projectiles {
     [RequireComponent(typeof(Collider), typeof(Rigidbody))]
     public abstract class BaseProjectile : MonoBehaviour {
         public Rigidbody m_rigidbody;
-
         public Rigidbody Rigidbody => m_rigidbody;
 
         public bool IsActive { get; protected set; }
@@ -18,13 +16,12 @@ namespace Projectiles {
         protected IMovable m_movableTarget;
 
         public IDamageable DamageableTarget => m_damageableTarget;
-
         public IMovable MovableTarget => m_movableTarget;
 
         protected ProjectileSettings m_projectileSettings;
         protected GamePool<BaseProjectile> m_projectilePool;
         protected Vector3 m_projectileTargetPosition;
-
+        
         public abstract ProjectileType ProjectileType { get; }
 
         public virtual void Initialize(IDamageable target, Transform shootPoint) {

@@ -1,5 +1,4 @@
 using Managers;
-using Models;
 using UnityEngine;
 
 namespace Controllers {
@@ -7,7 +6,7 @@ namespace Controllers {
         public MonsterPathManager m_pathManager;
         
         private MonsterSpawner m_monsterSpawner;
-        private MonsterMover m_monsterMover;
+        private MonsterMover _mObjectMover;
         
         private void Awake() {
             InitializeSystems();
@@ -15,12 +14,12 @@ namespace Controllers {
 
         private void InitializeSystems() {
             m_monsterSpawner = new MonsterSpawner(m_pathManager.m_spawnPoint);
-            m_monsterMover = new MonsterMover(m_pathManager.m_moveTargetPoint);
+            _mObjectMover = new MonsterMover(m_pathManager.m_moveTargetPoint);
         }
 
         private void OnDestroy() {
             m_monsterSpawner.Dispose();
-            m_monsterMover.Dispose();
+            _mObjectMover.Dispose();
             PoolManager.ReleasePools();
         }
     }

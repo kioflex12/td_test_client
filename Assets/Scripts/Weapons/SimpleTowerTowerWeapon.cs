@@ -6,7 +6,7 @@ namespace Weapons {
         protected override WeaponType WeaponType => WeaponType.SimpleWeapon;
         
         public override void Shoot() {
-            if (m_shootTarget == null) {
+            if (m_shootTarget.IsAlive == false) {
                 return;
             }
             var projectile = GetOrCreateProjectile();
