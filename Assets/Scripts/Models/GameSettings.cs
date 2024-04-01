@@ -3,71 +3,84 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-namespace Models {
+namespace Models
+{
     [CreateAssetMenu(fileName = "GameSettings", menuName = "SO/Create GameSettings")]
-    public class GameSettings : ScriptableObject {
-        public MonsterSpawnSettings m_spawnSettings;
-        public MonsterSettings m_monsterSettings;
-        public List<BaseTowerWeaponSettings> m_towerWeaponSettings;
-        public List<ProjectileSettings> m_projectileSettings;
-        public CannonTowerWeaponSettings m_cannonTowerWeaponSettings;
+    public class GameSettings : ScriptableObject
+    {
+        [SerializeField] private MonsterSpawnSettings spawnSettings;
+        [FormerlySerializedAs("monsterSettings")] [SerializeField] private MonsterSettings monsterBalanceSettings;
+        [SerializeField] private List<BaseTowerWeaponSettings> towerWeaponSettings;
+        [FormerlySerializedAs("projectileSettings")] [SerializeField] private List<ProjectileSettings> projectileBalanceSettings;
+        [FormerlySerializedAs("cannonTowerWeaponSettings")] [SerializeField] private CannonTowerWeaponSettings cannonTowerSettigns;
+        
+        public MonsterSpawnSettings SpawnSettings => spawnSettings;
+        public MonsterSettings MonsterBalanceSettings => monsterBalanceSettings;
+        public List<BaseTowerWeaponSettings> TowerWeaponSettings => towerWeaponSettings;
+        public List<ProjectileSettings> ProjectileBalanceSettings => projectileBalanceSettings;
+        public CannonTowerWeaponSettings CannonTowerSettigns => cannonTowerSettigns;
 
-        public ProjectileSettings GetProjectileSettings(ProjectileType projectileType) {
-            foreach (var projectileSetting in m_projectileSettings)
+        public ProjectileSettings GetProjectileSettings(ProjectileType projectileType)
+        {
+            foreach (var projectileSetting in projectileBalanceSettings)
             {
-                if (projectileSetting.m_projectileType == projectileType)
+                if (projectileSetting.projectileType == projectileType)
                 {
                     return projectileSetting;
                 }
             }
-
             throw new Exception($"Can`t find projectile settings with Type {projectileType}");
         }
-        
-        public BaseTowerWeaponSettings GetWeaponTowerSettings(WeaponType weaponType) {
-            foreach (var weaponSetting in m_towerWeaponSettings)
+
+        public BaseTowerWeaponSettings GetWeaponTowerSettings(WeaponType weaponType)
+        {
+            foreach (var weaponSetting in towerWeaponSettings)
             {
-                if (weaponSetting.m_weaponType == weaponType)
+                if (weaponSetting.weaponType == weaponType)
                 {
                     return weaponSetting;
                 }
             }
-
             throw new Exception($"Can`t find projectile settings with Type {weaponType}");
         }
 
-        
+
         [Serializable]
-        public class MonsterSpawnSettings {
-            public float m_interval = 3;
-        }
-        
-        [Serializable]
-        public class MonsterSettings {
-            public float m_speed = 0.1f;
-            public int m_maxHP = 30;
-        }
-        
-        [Serializable]
-        public class ProjectileSettings {
-            public ProjectileType m_projectileType; 
-            public float m_speed = 0.2f;
-            public int m_damage = 10;
+        public class MonsterSpawnSettings
+        {
+            public float interval = 3;
         }
 
-        
         [Serializable]
-        public class BaseTowerWeaponSettings {
-            public WeaponType m_weaponType; 
-            public float m_shootInterval = 0.5f;
-            public float m_range = 4f;
-        } 
-        
+        public class MonsterSettings
+        {
+            public float speed = 0.1f;
+            public int maxHP = 30;
+        }
+
         [Serializable]
-        public class CannonTowerWeaponSettings  {
-            public float m_initialSpeed = 18f;
-            public float m_angle = 45f;
-            public float m_rotationSpeed = 5f;
+        public class ProjectileSettings
+        {
+            public ProjectileType projectileType;
+            public float speed = 0.2f;
+            public int damage = 10;
+        }
+
+
+        [Serializable]
+        public class BaseTowerWeaponSettings
+        {
+            public WeaponType weaponType;
+            public float shootInterval = 0.5f;
+            public float range = 4f;
+        }
+
+        [Serializable]
+        public class CannonTowerWeaponSettings
+        {
+            public float initialSpeed = 18f;
+            public float angle = 45f;
+            public float rotationSpeed = 5f;
         }
     }
 }

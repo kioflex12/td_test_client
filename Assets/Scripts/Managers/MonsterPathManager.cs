@@ -1,8 +1,13 @@
 using UnityEngine;
 
-namespace Managers {
-    public class MonsterPathManager : MonoBehaviour {
-        public Transform m_spawnPoint;
-        public Transform m_moveTargetPoint;
+namespace Managers
+{
+    public class MonsterPathManager : MonoBehaviour
+    {
+        [SerializeField] private Transform spawnPoint;
+        [SerializeField] private Transform moveTargetPoint;
+        
+        public Transform SpawnPoint => spawnPoint;
+        public Transform MoveTargetPoint => moveTargetPoint;
     }
 }

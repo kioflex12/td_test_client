@@ -4,37 +4,44 @@ using Managers;
 using Monsters;
 using UnityEngine;
 
-namespace Controllers {
-    public class MonsterMover : IDisposable {
-        private readonly Transform m_movePoint;
-        private readonly GamePool<Monster> m_pool;
+namespace Controllers
+{
+    public class MonsterMover : IDisposable
+    {
+        private readonly Transform _movePoint;
+        private readonly GamePool<Monster> _pool;
+        private readonly Coroutine _moveRoutine;
 
-        private Coroutine m_moveCoroutine;
-
-        public MonsterMover(Transform moveTargetPoint) {
-            m_movePoint = moveTargetPoint;
-            m_pool = PoolManager.GetOrCreatePool<Monster>();
-            m_moveCoroutine = CoroutineRunner.StartCoroutine(MoveCoroutine());
+        public MonsterMover(Transform moveTargetPoint)
+        {
+            _movePoint = moveTargetPoint;
+            _pool = PoolManager.GetOrCreatePool<Monster>();
+            _moveRoutine = CoroutineRunner.StartCoroutine(MoveCoroutine());
         }
 
-        private IEnumerator MoveCoroutine() {
+        private IEnumerator MoveCoroutine()
+        {
             var wfu = new WaitForFixedUpdate();
-            while (true) {
+            while (true)
+            {
                 yield return wfu;
 
-                foreach (var monster in m_pool.Get()) {
+                foreach (var monster in _pool.Get())
+                {
                     if (monster.IsAlive && monster is IMovable movableMonster)
                     {
-                        movableMonster.Move(m_movePoint);
+                        movableMonster.Move(_movePoint);
                     }
                 }
             }
         }
 
-        public void Dispose() {
-            if (m_moveCoroutine != null) {
-                CoroutineRunner.Stop(m_moveCoroutine);
-            }        
+        public void Dispose()
+        {
+            if (_moveRoutine != null)
+            {
+                CoroutineRunner.Stop(_moveRoutine);
+            }
         }
     }
 }

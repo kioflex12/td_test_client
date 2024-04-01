@@ -1,14 +1,20 @@
 using UnityEngine;
 
-namespace Models {
-    public static class ModelsProvider {
-        private static GameSettings m_gameSettings;
-        public static GameSettings GameSettings {
-            get {
-                if (m_gameSettings == null) {
-                    m_gameSettings = Resources.Load<GameSettings>("Models/GameSettings");
+namespace Models
+{
+    public static class ModelsProvider
+    {
+        private static GameSettings _gameSettings;
+
+        public static GameSettings GameSettings
+        {
+            get
+            {
+                if (_gameSettings == null)
+                {
+                    _gameSettings = Resources.Load<GameSettings>("Models/GameSettings");
                 }
-                return m_gameSettings;
+                return _gameSettings;
             }
         }
     }

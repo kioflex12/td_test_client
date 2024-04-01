@@ -2,7 +2,8 @@ using UnityEngine;
 
 namespace Monsters
 {
-    public interface IMovable {
+    public interface IMovable
+    {
         Transform Transform { get; }
         Transform MoveTarget { get; }
         float MoveSpeed { get; }

@@ -2,7 +2,8 @@ using UnityEngine;
 
 namespace Monsters
 {
-    public interface IDamageable {
+    public interface IDamageable
+    {
         Transform Transform { get; }
         bool IsAlive { get; }
         void ApplyDamage(float damage);

@@ -1,31 +1,36 @@
 using System.Collections.Generic;
 
-namespace Managers {
-    public class PoolManager { 
+namespace Managers
+{
+    public class PoolManager
+    {
+        private static readonly List<AbstractGamePool> _gamePools = new List<AbstractGamePool>();
 
-        private static readonly List<AbstractGamePool> m_gamePools = new List<AbstractGamePool>();
-
-        public static GamePool<T> GetOrCreatePool<T>() where T : class {
+        public static GamePool<T> GetOrCreatePool<T>() where T : class
+        {
             GamePool<T> pool = null;
-            
-            foreach (var abstractGamePool in m_gamePools) {
-                if (abstractGamePool is GamePool<T> gamePool) {
+
+            foreach (var abstractGamePool in _gamePools)
+            {
+                if (abstractGamePool is GamePool<T> gamePool)
+                {
                     pool = gamePool;
                     break;
                 }
             }
 
-            if (pool == null) {
+            if (pool == null)
+            {
                 pool = new GamePool<T>();
-                m_gamePools.Add(pool);
+                _gamePools.Add(pool);
             }
-            
+
             return pool;
         }
 
         public static void ReleasePools()
         {
-            m_gamePools.ForEach(pool => pool.ReleasePool());
+            _gamePools.ForEach(pool => pool.ReleasePool());
         }
     }
 }

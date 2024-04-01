@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Linq;
 using Managers;
 using Models;
@@ -8,50 +7,65 @@ using Towers;
 using UnityEngine;
 using static Models.GameSettings;
 
-namespace Weapons {
-    public abstract class BaseTowerWeapon: MonoBehaviour, IWeapon {
-        public BaseProjectile m_weaponProjectile;
-        public Transform m_shootPoint;
-        
-        protected BaseTowerWeaponSettings m_weaponSettings; 
-        protected GamePool<BaseProjectile> m_projectilePool;
-        
-        public IDamageable m_shootTarget;
-        protected IMovable m_movableTarget;
-        
-        protected float m_lastShotTime;
-        public float SqrShootDistance => m_weaponSettings.m_range * m_weaponSettings.m_range;
-        
+namespace Weapons
+{
+    public abstract class BaseTowerWeapon : MonoBehaviour, IWeapon
+    {
+        [SerializeField] private BaseProjectile weaponProjectile;
+        [SerializeField] private Transform shootPoint;
+        protected Transform ShootPoint => shootPoint;
+
+        private BaseTowerWeaponSettings _weaponSettings;
+        public BaseTowerWeaponSettings WeaponSettings => _weaponSettings;
+
+        private GamePool<BaseProjectile> _projectilePool;
+        public GamePool<BaseProjectile> ProjectilePool => _projectilePool;
+
+        private IDamageable _shootTarget;
+        public IDamageable ShootTarget => _shootTarget;
+
+        private IMovable _movableTarget;
+        public IMovable MovableTarget => _movableTarget;
+
+        protected float lastShotTime;
+        public float SqrShootDistance => _weaponSettings.range * _weaponSettings.range;
+
         protected abstract WeaponType WeaponType { get; }
-        
+
         public abstract void Shoot();
 
-        public virtual void Init() {
-            m_projectilePool = PoolManager.GetOrCreatePool<BaseProjectile>();
-            m_weaponSettings = ModelsProvider.GameSettings.GetWeaponTowerSettings(WeaponType);
-            m_lastShotTime = -m_weaponSettings.m_shootInterval;
+        public virtual void Init()
+        {
+            _projectilePool = PoolManager.GetOrCreatePool<BaseProjectile>();
+            _weaponSettings = ModelsProvider.GameSettings.GetWeaponTowerSettings(WeaponType);
+            lastShotTime = -_weaponSettings.shootInterval;
         }
 
-        public bool ShootAvailable() {
-            return m_lastShotTime + m_weaponSettings.m_shootInterval > Time.time == false || m_shootTarget == null;
+        public bool ShootAvailable()
+        {
+            return lastShotTime + _weaponSettings.shootInterval > Time.time == false || ShootTarget == null;
         }
 
-        private BaseProjectile CreateProjectile() {
-            var projectile = Instantiate(m_weaponProjectile, m_projectilePool.m_poolContainer.transform);
-            projectile.transform.position = m_shootPoint.position;
+        private BaseProjectile CreateProjectile()
+        {
+            var projectile = Instantiate(weaponProjectile, _projectilePool.PoolContainer.transform);
+            projectile.transform.position = shootPoint.position;
             projectile.gameObject.SetActive(false);
-            m_projectilePool.Add(projectile);
+            _projectilePool.Add(projectile);
             return projectile;
         }
 
-        public void SetTarget(IDamageable target) {
-            m_shootTarget = target;
-            m_movableTarget = target as IMovable;
+        public void SetTarget(IDamageable target)
+        {
+            _shootTarget = target;
+            _movableTarget = target as IMovable;
         }
 
-        protected BaseProjectile GetOrCreateProjectile() {
-            var projectile = m_projectilePool.Get().FirstOrDefault(p => p.IsActive == false && p.ProjectileType == m_weaponProjectile.ProjectileType);
-            if (projectile == null) {
+        protected BaseProjectile GetOrCreateProjectile()
+        {
+            var projectile = _projectilePool.Get().FirstOrDefault(p => p.IsActive == false && p.ProjectileType == weaponProjectile.ProjectileType);
+            if (projectile == null)
+            {
                 projectile = CreateProjectile();
             }
             return projectile;
