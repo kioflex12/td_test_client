@@ -9,10 +9,10 @@ namespace Models
     public class GameSettings : ScriptableObject
     {
         [SerializeField] private MonsterSpawnSettings spawnSettings;
-        [FormerlySerializedAs("monsterSettings")] [SerializeField] private MonsterSettings monsterBalanceSettings;
+        [SerializeField] private MonsterSettings monsterBalanceSettings;
         [SerializeField] private List<BaseTowerWeaponSettings> towerWeaponSettings;
-        [FormerlySerializedAs("projectileSettings")] [SerializeField] private List<ProjectileSettings> projectileBalanceSettings;
-        [FormerlySerializedAs("cannonTowerWeaponSettings")] [SerializeField] private CannonTowerWeaponSettings cannonTowerSettigns;
+        [SerializeField] private List<ProjectileSettings> projectileBalanceSettings;
+        [SerializeField] private CannonTowerWeaponSettings cannonTowerSettigns;
         
         public MonsterSpawnSettings SpawnSettings => spawnSettings;
         public MonsterSettings MonsterBalanceSettings => monsterBalanceSettings;
